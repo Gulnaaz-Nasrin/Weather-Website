@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+            background: url('Cloudy.gif') no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .box {
+            position: relative;
+            width: 90%;
+            max-width: 350px;
+            height: auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(50px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            text-align: center;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(-20px);
+            }
+
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        #Weathercon {
+            margin: 20px 0;
+        }
+
+        .info {
+            color: white;
+        }
+
+        .location {
+            font-size: 1.5rem;
+        }
+
+        #date {
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .temp {
+            font-size: 2.5rem;
+            margin: 10px 0;
+        }
+
+        .temp-min-max {
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        @media screen and (max-width: 768px) {
+            .location {
+                font-size: 1.2rem;
+            }
+
+            #date {
+                font-size: 0.9rem;
+            }
+
+            .temp {
+                font-size: 2rem;
+            }
+
+            .temp-min-max {
+                font-size: 0.9rem;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .location {
+                font-size: 1rem;
+            }
+
+            #date {
+                font-size: 0.8rem;
+            }
+
+            .temp {
+                font-size: 1.8rem;
+            }
+
+            .temp-min-max {
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+    <title>Weather App</title>
+</head>
+
+<body>
+    <div class="box">
+        <div id="Weathercon">
+            <i class="fa-solid fa-sun fa-2xl" style="color: #eccc68;"></i>
+        </div>
+        <div class="info">
+            <h2 class="location"><i class="fa-solid fa-street-view" style="color: #ffff;"></i> {%location%}, {%country%}
+            </h2>
+            <p id="date">THU | JULY 24 </p>
+            <p id="time" style="font-weight: bold; color: darkslateblue;"></p>
+            <h1 class="temp">{%tempmval%}&deg;C</h1>
+            <h3 class="temp-min-max">Min {%tempmin%}&deg;C | Max {%tempmax%}&deg;C</h3>
+        </div>
+    </div>
+
+    <script>
+        const currDate = document.getElementById('date');
+        const currTime = document.getElementById('time');
+
+        const tempStatus = "{%tempSts%}";
+        if (tempStatus == 'Sunny') {
+            Weathercon.innerHTML = ' <i class="fa-solid fa-sun fa-2xl" style="color: #eccc68;"></i>';
+        } else if (tempStatus == 'Clouds') {
+            Weathercon.innerHTML = '<i class="fa-solid fa-cloud fa-2xl" style = "color:#f1f2f6" ></i>'
+        } else if (tempStatus == 'Rain') {
+            Weathercon.innerHTML = '<i class="fa-solid fa-cloud-rain fa-2xl" style = "color:#a4b0be ></i>'
+        } else {
+            Weathercon.innerHTML = '<i class="fa-solid fa-cloud fa-2xl" style = "color:#44c3de" ></i>'
+        }
+
+        const updateTime = () => {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const period = hours >= 12 ? 'PM' : 'AM';
+            const formattedHours = hours % 12 || 12;
+            currTime.textContent = `${formattedHours}:${minutes}:${seconds} ${period}`;
+
+            const weekdays = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            const day = weekdays[now.getDay()];
+            const month = months[now.getMonth()];
+            const date = String(now.getDate()).padStart(2, '0');
+            currDate.textContent = `${day} | ${month} ${date}`;
+        };
+
+        // Update time initially
+        updateTime();
+
+        // Update time every second
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+
+</html>
